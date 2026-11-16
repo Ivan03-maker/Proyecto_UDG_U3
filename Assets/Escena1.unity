@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 838485772}
   - component: {fileID: 838485771}
   m_Layer: 0
-  m_Name: referencia
+  m_Name: pared_derecha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -482,7 +482,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1471155665}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1366371147
@@ -499,6 +500,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JohnMovement
   speed: 6
   jumpForce: 10
+  bulletPrefab: {fileID: 3737522968285520093, guid: 3ea9cfeb619098c40a79c1d611f6cfad, type: 3}
+  firePoint: {fileID: 1471155665}
 --- !u!1 &1411017539
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,7 +514,7 @@ GameObject:
   - component: {fileID: 1411017542}
   - component: {fileID: 1411017541}
   m_Layer: 0
-  m_Name: referencia (1)
+  m_Name: pared_izquierda
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -638,6 +641,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &1471155664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1471155665}
+  m_Layer: 0
+  m_Name: Firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1471155665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471155664}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.89, y: -0.37, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1366371146}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1673703815
 GameObject:
   m_ObjectHideFlags: 0
