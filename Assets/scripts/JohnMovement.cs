@@ -13,6 +13,10 @@ public class JohnMovement : MonoBehaviour
     private bool grounded;
     private float lastDirection = 1f;
 
+    // Variables para el control del ritmo de disparo (cadencia)
+    private float lastShoot = 0f;
+    public float fireRate = 0.25f; // Tiempo en segundos entre cada bala (ajusta este valor si quieres que dispare más rápido o más lento)
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -45,10 +49,11 @@ public class JohnMovement : MonoBehaviour
             Jump();
         }
 
-        // Disparar con la tecla J
-        if (Input.GetKeyDown(KeyCode.J))
+        // Disparar de forma automática o ráfaga al mantener presionada la tecla J respetando el fireRate
+        if (Input.GetKey(KeyCode.J) && Time.time > lastShoot + fireRate)
         {
             Shoot();
+            lastShoot = Time.time; // Actualiza el tiempo del último disparo
         }
     }
 
@@ -56,17 +61,6 @@ public class JohnMovement : MonoBehaviour
     {
         // Aplicar velocidad horizontal manteniendo la física en Y
         rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
-
-        // Controlar la animación de salto según la velocidad vertical (Y)
-        // Si va hacia arriba o hacia abajo en el aire, activamos "jumping"
-        if (!grounded && rb.linearVelocity.y != 0)
-        {
-            animator.SetBool("jumping", true);
-        }
-        else
-        {
-            animator.SetBool("jumping", false);
-        }
     }
 
     void Jump()
