@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class JohnMovement : MonoBehaviour
 {
-    public float speed = 3f;
+    public float speed = 6f;
     public float jumpForce = 10f;
-    public GameObject bulletPrefab; // Arrastra aquí el prefab de la bala desde el Inspector
-    public Transform firePoint;     // Arrastra aquí el FirePoint
+    public GameObject bulletPrefab; 
+    public Transform firePoint;     
 
     private Rigidbody2D rb;
     private Animator animator;
     private float horizontal;
     private bool grounded;
-    private float lastDirection = 1f; // 1 para derecha, -1 para izquierda
+    private float lastDirection = 1f;
 
     void Start()
     {
@@ -21,13 +21,13 @@ public class JohnMovement : MonoBehaviour
 
     void Update()
     {
-        // Capturar input horizontal de teclado (A/D o flechas)
+        // Capturar movimiento horizontal (A/D)
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        // Activar o desactivar la animación de correr en el Animator
+        // Animación de correr
         animator.SetBool("running", horizontal != 0.0f);
 
-        // Voltear el sprite y actualizar la última dirección de disparo
+        // Voltear sprite y dirección
         if (horizontal < 0.0f)
         {
             transform.localScale = new Vector3(-1, 1, 1);
@@ -39,13 +39,13 @@ public class JohnMovement : MonoBehaviour
             lastDirection = 1f;
         }
 
-        // Detectar salto con la tecla W o Espacio cuando esté en el suelo
+        // Detectar salto con la tecla W cuando esté en el suelo
         if (Input.GetKeyDown(KeyCode.W) && grounded)
         {
             Jump();
         }
 
-        // Detectar evento de teclado para disparar (Ejemplo: Tecla J o K, o Botón Fire1 / Espacio)
+        // Disparar con la tecla J
         if (Input.GetKeyDown(KeyCode.J))
         {
             Shoot();
@@ -57,25 +57,48 @@ public class JohnMovement : MonoBehaviour
         // Aplicar velocidad horizontal manteniendo la física en Y
         rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
 
-        // Comprobación de suelo mediante un rayo adaptado a los pies
-        Vector2 raycastOrigin = new Vector2(transform.position.x, transform.position.y - 0.5f);
-        RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.down, 0.2f);
-        grounded = (hit.collider != null);
+        // Controlar la animación de salto según la velocidad vertical (Y)
+        // Si va hacia arriba o hacia abajo en el aire, activamos "jumping"
+        if (!grounded && rb.linearVelocity.y != 0)
+        {
+            animator.SetBool("jumping", true);
+        }
+        else
+        {
+            animator.SetBool("jumping", false);
+        }
     }
 
     void Jump()
     {
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        grounded = false; 
+    }
+
+    // Detectar cuando John está tocando el suelo
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        foreach (ContactPoint2D hit in collision.contacts)
+        {
+            if (hit.normal.y > 0.5f)
+            {
+                grounded = true;
+                return;
+            }
+        }
+    }
+
+    // Detectar cuando John se separa del suelo
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        grounded = false;
     }
 
     void Shoot()
     {
         if (bulletPrefab != null && firePoint != null)
         {
-            // Instanciar la bala en la posición del FirePoint
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
-            
-            // Asignar la dirección en la que debe viajar la bala según hacia dónde mira John
             BulletController bulletController = bullet.GetComponent<BulletController>();
             if (bulletController != null)
             {
