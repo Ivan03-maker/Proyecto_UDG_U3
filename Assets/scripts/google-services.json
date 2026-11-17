@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "481061820270",
+    "project_id": "proyectoudg-unity",
+    "storage_bucket": "proyectoudg-unity.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481061820270:android:0fdee1eb310b243136d37f",
+        "android_client_info": {
+          "package_name": "com.Ivan.ProyectoUDG3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBOD-wp5037pbU6-MnTCn9vSM5pQ3-iaM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
