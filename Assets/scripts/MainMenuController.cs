@@ -1,31 +1,135 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Necesario para cambiar de escena
-using TMPro; // Necesario para usar TextMeshPro
+using UnityEngine.SceneManagement;
+using TMPro;
+using System.Collections; // Necesario para las corrutinas (temporizador del banner)
+
+
 
 public class MainMenuController : MonoBehaviour
+
 {
-    public TextMeshProUGUI menuCoinText; // Arrastra aquí tu texto del menú en el Inspector
 
-    void Start()
-    {
-        // Si el GameManager existe, muestra las monedas acumuladas en la UI del menú
-        if (GameManager.instance != null && menuCoinText != null)
-        {
-            menuCoinText.text = "Puntuación Total: " + GameManager.instance.totalCoins;
-        }
-    }
+public TextMeshProUGUI menuCoinText;
+public TextMeshProUGUI saveStatusText; // Arrastra aquí tu nuevo texto de estado en el Inspector
 
-    // Método que se llamará al hacer clic en el botón Jugar
-    public void PlayGame()
-    {
-        // Carga la escena del nivel de juego
-        SceneManager.LoadScene("Escena1");
-    }
 
-    // Método para salir del juego (opcional)
-    public void QuitGame()
+
+	void Start()
+	{
+
+	if (GameManager.instance != null && menuCoinText != null)
+
+	{
+
+	menuCoinText.text = "Puntuación Total: " + GameManager.instance.totalCoins;
+	}
+
+
+
+	// Asegúrate de que el mensaje de guardado comience oculto o vacío
+
+	if (saveStatusText != null)
+
+	{
+
+	saveStatusText.text = "";
+
+	}
+
+	}
+
+
+
+	public void PlayGame()
+
+	{
+
+	SceneManager.LoadScene("Escena1");
+
+	}
+
+
+
+// Método que se ejecuta cuando el jugador presiona el botón de guardar
+
+	public void TriggerSaveData()
+
+	{
+
+	if (GameManager.instance != null)
+
+	{
+
+	// Llama a tu función de guardado existente en el GameManager / FirestoreManager
+
+	// GameManager.instance.SaveDataToFirebase();
+
+
+
+	// Muestra el banner visual de éxito
+
+	StartCoroutine(ShowSaveBanner("¡Progreso guardado en la nube con éxito!"));
+
+	}
+
+	else
+
+	{
+
+	StartCoroutine(ShowSaveBanner("Error: No se encontró el GameManager"));
+
+	}
+
+	}
+
+
+
+	// Corrutina para mostrar el mensaje y ocultarlo automáticamente después de 3 segundos
+
+	private IEnumerator ShowSaveBanner(string message)
+
+	{
+
+	if (saveStatusText != null)
+
+	{
+
+	saveStatusText.text = message;
+
+	yield return new WaitForSeconds(3f); // Espera 3 segundos en pantalla
+
+	saveStatusText.text = ""; // Limpia el texto
+
+	}
+
+	}
+
+
+
+	public void QuitGame()
+
+	{
+
+	Debug.Log("Cerrando el juego...");
+
+	Application.Quit();
+
+
+
+	#if UNITY_EDITOR
+
+	UnityEditor.EditorApplication.isPlaying = false;
+
+	#endif
+
+	}
+	
+	public void ShowSaveBannerExternal(string message)
+{
+    if (this != null && gameObject.activeInHierarchy)
     {
-        Application.Quit();
-        Debug.Log("Saliendo del juego...");
+        StartCoroutine(ShowSaveBanner(message));
     }
+}
+
 }
